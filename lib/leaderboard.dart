@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,10 +20,10 @@ class _changeleaderboardState extends State<changeleaderboard> {
   TextEditingController firstnameController = TextEditingController();
   TextEditingController secondnameController = TextEditingController();
   TextEditingController thirdnameController = TextEditingController();
-  TextEditingController imgurlController = TextEditingController();
-  TextEditingController year1Controller = TextEditingController();
-  TextEditingController year2Controller = TextEditingController();
-  TextEditingController year3Controller = TextEditingController();
+  TextEditingController fyearController = TextEditingController();
+  TextEditingController syearController = TextEditingController();
+  TextEditingController tyearController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
 
   Future<void> addLeaderBoard() async {
     await FirebaseFirestore.instance.collection('leaderboard').add({
@@ -31,10 +33,10 @@ class _changeleaderboardState extends State<changeleaderboard> {
       'third': thirdnameController.text,
       'moderatorToken' : '0101',
       'timestamp': FieldValue.serverTimestamp(),
-      'img_url': imgurlController.text,
-      'year1': year1Controller.text,
-      'year2': year2Controller.text,
-      'year3': year3Controller.text,
+      'fyear': fyearController.text,
+      'syear': syearController.text,
+      'tyear': tyearController.text,
+      'description': descriptionController.text,
     });
 
     //Clearing the textfields after adding the notif:
@@ -42,10 +44,10 @@ class _changeleaderboardState extends State<changeleaderboard> {
     firstnameController.clear();
     secondnameController.clear();
     thirdnameController.clear();
-    imgurlController.clear();
-    year1Controller.clear();
-    year2Controller.clear();
-    year3Controller.clear();
+    fyearController.clear();
+    syearController.clear();
+    tyearController.clear();
+    descriptionController.clear();
   }
 
 
@@ -78,6 +80,16 @@ class _changeleaderboardState extends State<changeleaderboard> {
                 width: 480,
                 child: TextField(
                     style: const TextStyle(color: Colors.white),
+                    controller: descriptionController,
+                    decoration: const InputDecoration(labelText: "Enter Event Description",
+                        labelStyle: TextStyle(color: Colors.white))
+                ),
+              ),
+              const SizedBox(height: 10,),
+              SizedBox(
+                width: 480,
+                child: TextField(
+                    style: const TextStyle(color: Colors.white),
                     controller: firstnameController,
                     decoration: const InputDecoration(labelText: "Enter First Prize name",
                         labelStyle: TextStyle(color: Colors.white))
@@ -88,7 +100,7 @@ class _changeleaderboardState extends State<changeleaderboard> {
                 width: 480,
                 child: TextField(
                     style: const TextStyle(color: Colors.white),
-                    controller: year1Controller,
+                    controller: fyearController,
                     decoration: const InputDecoration(labelText: "Enter Year",
                         labelStyle: TextStyle(color: Colors.white))
                 ),
@@ -109,7 +121,7 @@ class _changeleaderboardState extends State<changeleaderboard> {
                 width: 480,
                 child: TextField(
                     style: const TextStyle(color: Colors.white),
-                    controller: year2Controller,
+                    controller: syearController,
                     decoration: const InputDecoration(labelText: "Enter Year",
                         labelStyle: TextStyle(color: Colors.white))
                 ),
@@ -129,21 +141,12 @@ class _changeleaderboardState extends State<changeleaderboard> {
                 width: 480,
                 child: TextField(
                     style: const TextStyle(color: Colors.white),
-                    controller: year3Controller,
+                    controller: tyearController,
                     decoration: const InputDecoration(labelText: "Enter Year",
                         labelStyle: TextStyle(color: Colors.white))
                 ),
               ),
               const SizedBox(height: 10,),
-              SizedBox(
-                width: 480,
-                child: TextField(
-                    style: const TextStyle(color: Colors.white),
-                    controller: imgurlController,
-                    decoration: const InputDecoration(labelText: "Enter Image URL if any",
-                        labelStyle: TextStyle(color: Colors.white))
-                ),
-              ),
               ElevatedButton(onPressed: addLeaderBoard, child: const Text('Send to the LeaderBoard!'))
             ],
           ),
@@ -159,8 +162,10 @@ class leaderboard extends StatefulWidget {
   @override
   State<leaderboard> createState() => _leaderboardState();
 }
-
 class _leaderboardState extends State<leaderboard> {
+  // Keep track of which container is expanded
+  Map<int, bool> expandedStates = {};
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -213,45 +218,50 @@ class _leaderboardState extends State<leaderboard> {
               final eventboard = leaderboard[index].data() as Map<String, dynamic>;
               final timestamp = eventboard['timestamp'] as Timestamp?;
               final eventDate = timestamp?.toDate();
-              final imgUrl = eventboard['img_url'] ?? '';
               final eventName = eventboard['eventname'] ?? 'Event Name';
+              final description = eventboard['description'] ?? 'Description';
               final firstPlace = eventboard['first'] ?? 'First Place';
+              final fyear = eventboard['fyear'] ?? 'First cha year';
+              final fbranch = eventboard['fbranch'] ?? 'First chi branch';
               final secondPlace = eventboard['second'] ?? 'Second Place';
+              final syear = eventboard['syear'] ?? 'Second cha year';
+              final sbranch = eventboard['sbranch'] ?? 'Second chi branch';
               final thirdPlace = eventboard['third'] ?? 'Third Place';
+              final tyear = eventboard['tyear'] ?? 'Third cha year';
+              final tbranch = eventboard['tbranch'] ?? 'Third chi branch';
+              DateTime date = eventboard['timestamp'].toDate();
+
+              final isExpanded = expandedStates[index] ?? false;
 
               return GestureDetector(
-                child: Container(
-                  padding: const EdgeInsets.all(15),
-                  margin:  const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                onTap: () {
+                  setState(() {
+                    expandedStates[index] = !(expandedStates[index] ?? false);
+                  });
+                },
+                 child: AnimatedSize(
+                   duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  child: AnimatedContainer(
+                  duration: Duration(milliseconds: 500,),
+                  curve: Curves.fastLinearToSlowEaseIn,
+                  child: Container(
+                  padding: const EdgeInsets.all(10),
+                  margin:  const EdgeInsets.symmetric(vertical: 8),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF003366), Color(0xFF001F54)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.3),
-                        blurRadius: 5,
+                        blurRadius: 10,
                         offset: const Offset(2, 2),
                       ),
                     ],
                   ),
                   child: Row(
                     children: [
-                      if (eventboard['img_url'] != null &&
-                          eventboard['img_url'].isNotEmpty)
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.network(
-                            eventboard['img_url'],
-                            height: 70,
-                            width: 90,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 20,),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -259,90 +269,216 @@ class _leaderboardState extends State<leaderboard> {
                             Text(
                               eventboard['eventname'] ?? 'Event Name',
                               style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
+                                  color: Colors.black,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.bold),
                               textAlign: TextAlign.center,
                             ),
                             const SizedBox(height: 5),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                            Text(
+                              eventboard['description'] ?? 'Description',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(color: Colors.grey, fontSize: 13),),
+                            const SizedBox(height: 5,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [Icon(Icons.calendar_today, size: 14, color: Colors.grey,),
+                                const SizedBox(width: 5,),
+                                Text(
+                                  textAlign: TextAlign.center,
+                                  date.toLocal().toString().split(' ')[0],
+                                  style: TextStyle(color: Colors.grey, fontSize: 12),
+                                ),],),
+                            const SizedBox(height: 5),
+                            Text(
+                              'Tap to show winners!',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(color: Colors.grey, fontSize: 13),),
+                          ],
+                        ),
+                      ),
+                      if (isExpanded)
+                        AnimatedCrossFade(firstChild: const SizedBox.shrink(),
+                            crossFadeState: isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst, duration: Duration(milliseconds: 3000),
+                          secondChild: Column(
+                        children: [
+                          const SizedBox(height: 16,),
+                          const SizedBox(width: 100,),
+                          ClipOval(
+                            child: Image.network(
+                              'https://cdn-icons-png.flaticon.com/512/6394/6394616.png',
+                              height: 60,
+                              width: 60,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                          const SizedBox(width: 100,),
+                          const SizedBox(width: 10, height: 20,),
+                          ClipOval(
+                            child: Image.network(
+                              'https://cdn-icons-png.flaticon.com/512/5406/5406611.png',
+                              height: 60,
+                              width: 60,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                          const SizedBox(width: 100,),
+                          const SizedBox(width: 10, height: 16,),
+                          ClipOval(
+                            child: Image.network(
+                              'https://cdn.iconscout.com/icon/premium/png-512-thumb/third-prize-520169.png',
+                              height: 60,
+                              width: 60,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                          const SizedBox(width: 10, height: 16,),
+
+                        ],
+                      ),
+                  ),
+                      const SizedBox(width: 20,),
+                      if (isExpanded)
+                      Expanded(
+                        child: Column(
+                          children: [
+                            const SizedBox(height: 16,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    const Text(
-                                      'I. ',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                    Text(
-                                      eventboard['first'] ?? 'First Place',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                const SizedBox(height: 5),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    const Text(
-                                      'II. ',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                    Text(
-                                      eventboard['second'] ?? 'Second Place',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                const SizedBox(height: 5),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    const Text(
-                                      'III. ',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                    Text(
-                                      eventboard['third'] ?? 'Third Place',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                const SizedBox(height: 5),
-                                // Text(
-                                //   date.toString().split(' ')[0],//formats timestamp to show only the date
-                                //   style: const TextStyle(fontSize: 14,
-                                //       color: Colors.grey),
-                                // ),
+                                Text(
+                                  eventboard['first'] ?? 'First Place',
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                )
                               ],
                             ),
+                            const SizedBox(height: 8,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Expanded(child: Text(
+                                  eventboard['fyear'] ?? 'First cha year',
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  eventboard['fbranch'] ?? 'First chi branch',
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                  ),
+                                )
+                              ],
+                            ),
+                            const SizedBox(height: 16,),
+                            // Expanded(child: Container(
+                            //   color: Colors.black,
+                            // ),
+                            // ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Expanded(child: Text(
+                                  eventboard['second'] ?? 'Second Place',
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  eventboard['syear'] ?? 'Second cha year',
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                  ),
+                                )
+                              ],
+                            ),
+                            const SizedBox(height: 8,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  eventboard['sbranch'] ?? 'Second chi branch',
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                  ),
+                                )
+                              ],
+                            ),
+                            const SizedBox(height: 16,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  eventboard['third'] ?? 'Third Place',
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                )
+                              ],
+                            ),
+                            const SizedBox(height: 8,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  eventboard['tyear'] ?? 'Third cha year',
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                  ),
+                                )
+                              ],
+                            ),
+                            const SizedBox(height: 8,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  eventboard['tbranch'] ?? 'Third chi branch',
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                  ),
+                                )
+                              ],
+                            ),
+                            const SizedBox(height: 16,),
                           ],
                         ),
                       ),
                     ],
                   ),
                 ),
+                  ),
+                 ),
               );
+
             },
           );
         },
