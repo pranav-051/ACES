@@ -194,4 +194,3 @@ class notifdeetspage extends StatelessWidget{
     );
   }
 }
-
