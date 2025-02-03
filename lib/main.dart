@@ -2,7 +2,7 @@ import 'package:aces/app_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:aces/SplashPage.dart';
+import 'package:aces/splash_page.dart';
 import 'package:aces/firebase_options.dart';
 import 'package:aces/settings_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
       child: Consumer<SettingsManager>(
         builder: (context, settings, child) {
           return MaterialApp(
+            debugShowCheckedModeBanner: false, // Remove the debug banner
             title: 'Flutter Demo',
             theme: settings.isDarkMode ? AppThemes.darkTheme : AppThemes.lightTheme,
             locale: settings.currentLocale,

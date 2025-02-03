@@ -3,10 +3,8 @@ import 'package:aces/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:aces/components/user_profile_card.dart';
 
-
 class UserProfileGrid extends StatelessWidget {
-  const UserProfileGrid({Key? key}) : super(key: key);
-
+  const UserProfileGrid({super.key});
   @override
   Widget build(BuildContext context) {
     final List<Map<String, String>> users = [
@@ -43,19 +41,17 @@ class UserProfileGrid extends StatelessWidget {
 
     return Scaffold(
       appBar:AppBar(
-        iconTheme: const IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.white),
         title: const Row(
           children: [
             CustomText(
               text: 'Developers',
               fontSize: 18.0,
               fontWeight: FontWeight.w500,
-              color: Colors.black,
             ),
           ],
         ),
       ),
-      backgroundColor: AppColors.lightGray,
       body: Padding(
         padding: const EdgeInsets.fromLTRB(10, 20, 10, 50),
         child: GridView.builder(

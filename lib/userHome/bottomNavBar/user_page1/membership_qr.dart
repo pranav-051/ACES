@@ -1,5 +1,5 @@
 import 'dart:ui' as ui;
-import 'package:aces/userHome/bottomNavBar/mainBottomNav.dart';
+import 'package:aces/userHome/bottomNavBar/main_bottom_navigation.dart';
 import 'package:aces/components/text.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +22,7 @@ class membership_qr extends StatelessWidget {
             text: "Digital ID",
             fontSize: 18.0,
             fontWeight: FontWeight.w500,
-            color: Colors.black,)
+          )
       ),
       body: const Padding(
         padding: EdgeInsets.all(8.0),

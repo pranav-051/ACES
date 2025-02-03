@@ -1,103 +1,115 @@
-import 'dart:ui' as ui;
-import 'package:aces/userHome/bottomNavBar/page1.dart';
+import 'package:aces/components/eventHeader.dart';
 import 'package:aces/components/text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'past_event_gallery_images_list.dart';
+import 'image_paths.dart'; // Import the image paths file
 
-class event_gallery extends StatefulWidget {
-  const event_gallery({Key? key}) : super(key: key);
-
-  @override
-  State<event_gallery> createState() => _event_gallery();
-}
-
-class _event_gallery extends State<event_gallery> {
-  Future<ui.Image> _decodeImage(String assetPath) async {
-    final data = await DefaultAssetBundle.of(context).load(assetPath);
-    return decodeImageFromList(data.buffer.asUint8List());
-  }
-
-  Widget _buildGridItem(String assetPath) {
-    return FutureBuilder<ui.Image>(
-      future: _decodeImage(assetPath),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (snapshot.hasError || !snapshot.hasData) {
-          return const Icon(Icons.error, size: 50, color: Colors.red);
-        }
-
-        return GestureDetector(
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return Dialog(
-                  backgroundColor: Colors.transparent,
-                  child: InteractiveViewer(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.asset(
-                        assetPath,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            );
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black12),
-              borderRadius: BorderRadius.circular(8),
-              color: Colors.grey[200],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.asset(
-                assetPath,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
+class EventGallery extends StatelessWidget {
+  const EventGallery({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const Page1(title: "Page 1")),
-              );
-            },
-          ),
-        title: const CustomText(
-          text: "Past Events Gallery",
-          fontSize: 18.0,
-          fontWeight: FontWeight.w500,
-          color: Colors.black,)
+        title: const Text('Event Gallery'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: MasonryGridView.count(
-          crossAxisCount: 2, // Number of columns
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-          itemCount: past_event_gallery_images_list.length, // Use the imported list
-          itemBuilder: (context, index) {
-            return _buildGridItem(past_event_gallery_images_list[index]);
-          },
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            _buildCard(context, folder1Images, 'Event 1', '20/20/2020'),
+            const SizedBox(height: 16),
+            _buildCard(context, folder2Images, 'Event 2', '10/10/2021'),
+          ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildCard(BuildContext context, List<String> imagePaths, String folderName, String eventDate) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ImageGridScreen(
+              imagePaths: imagePaths,
+              folderName: folderName,
+              eventDate: eventDate,
+            ),
+          ),
+        );
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        elevation: 5,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              EventHeader(eventName: folderName, eventDate: eventDate),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: imagePaths.take(4).map((path) {
+                  return ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      path,
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
+                    ),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 10,),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ImageGridScreen extends StatelessWidget {
+  final List<String> imagePaths;
+  final String folderName;
+
+  const ImageGridScreen({
+    super.key,
+    required this.imagePaths,
+    required this.folderName, required String eventDate,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title:         CustomText(
+          text: (folderName),
+          fontSize: 18.0,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      body: GridView.builder(
+        padding: const EdgeInsets.all(8.0),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+        ),
+        itemCount: imagePaths.length,
+        itemBuilder: (context, index) {
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Image.asset(
+              imagePaths[index],
+              fit: BoxFit.cover,
+            ),
+          );
+        },
       ),
     );
   }

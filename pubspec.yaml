@@ -49,6 +49,9 @@ dependencies:
   url_launcher: ^6.1.8
   flutter_localization: ^0.3.0
   provider: ^6.0.5
+  table_calendar: ^3.0.7
+  youtube_player_iframe: ^4.0.4
+  graphview: ^1.2.0
 
 dev_dependencies:
   flutter_test:
@@ -80,6 +83,45 @@ flutter:
     - assets/imag2.jpg
     - assets/imag3.jpg
     - assets/pranav.png
+    - assets/mission.jpg
+    - assets/vision.jpg
+    - assets/objectives.png
+    - assets/gmail.png
+    - assets/linkedIn.png
+    - assets/magazine.jpg
+    - assets/firstRank.png
+    - assets/secondRank.png
+    - assets/thirdRank.png
+    - assets/splashImage.png
+    - assets/google.png
+    - assets/facebook.png
+    - assets/MS.png
+    - assets/Tweeter.png
+    - assets/slider/img1.png
+    - assets/slider/img2.png
+    - assets/slider/img3.png
+    - assets/slider/img4.png
+    - assets/be_a_part.png
+    - assets/team_aces.png
+    - assets/visit_website.png
+    - assets/year_calender.png
+    - assets/event_gallery.png
+    - assets/newsletter.png
+    - assets/digitalID.webp
+    - assets/magazine.png
+    - assets/slider/homeSlider1.png
+    - assets/slider/homeSlider2.png
+    - assets/slider/homeSlider3.png
+    - assets/teams/d&PTeam.heic
+    - assets/teams/editorialTeam.heic
+    - assets/teams/eventTeam.heic
+    - assets/teams/leads.heic
+    - assets/teams/mediaTeam.heic
+    - assets/teams/techTeam.heic
+    - assets/teams/treasuryTeam.heic
+    - assets/teams/webTeam.heic
+    - assets/people/Urmila_Kalshetti.jpg
+    - assets/people/Mamata_Pokale.jpeg
     - assets/past_event_gallery/img1.jpeg
     - assets/past_event_gallery/img2.jpeg
     - assets/past_event_gallery/img3.jpeg

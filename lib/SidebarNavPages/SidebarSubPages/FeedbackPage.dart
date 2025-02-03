@@ -1,7 +1,8 @@
+import 'package:aces/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class FeedbackPage extends StatefulWidget {
-  const FeedbackPage({key, required this.title});
+  const FeedbackPage({super.key, required this.title});
   final String title;
   @override
   State<FeedbackPage> createState() => _FeedbackPage();
@@ -12,35 +13,34 @@ class _FeedbackPage extends State<FeedbackPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar:AppBar(
-          iconTheme: const IconThemeData(color: Colors.white),
-          centerTitle: true,
-
-          title: Row(
+          backgroundColor: AppColors.scarletRed,
+          iconTheme: const IconThemeData(size: 30),
+          title: const Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [Text('Feedback Form         ',style: TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.w500)),],
+            children: [Text('Feedback Form         ',style: TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.w500)),],
           ),
         ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            SizedBox(height: 10.0),
-            Text("Please Select the Type of the feedback",style: TextStyle(
+            const SizedBox(height: 10.0),
+            const Text("Please Select the Type of the feedback",style: TextStyle(
               color: Color(0xffc5c5c5)),
             ),
-            SizedBox(height: 25.0),
+            const SizedBox(height: 25.0),
             buildCheckItem("Login Truble"),
             buildCheckItem("Phone Number Related"),
             buildCheckItem("Personal Profile"),
             buildCheckItem("Other Issues"),
             buildCheckItem("Suggestions"),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             buildFeedbackForm(),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             buildNumberField(),
-        Spacer(),
+        const Spacer(),
             Row(
               children: <Widget>[
                 Expanded(
@@ -75,21 +75,21 @@ class _FeedbackPage extends State<FeedbackPage> {
   }
 
   buildNumberField(){
-    return TextField(style: TextStyle(
+    return TextField(style: const TextStyle(
       color: Colors.black,
     ),
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.all(0.0),
+        contentPadding: const EdgeInsets.all(0.0),
         prefixIcon: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Container(
-              decoration: BoxDecoration(border: Border(
+              decoration: const BoxDecoration(border: Border(
                 right: BorderSide(width: 1.0,color: Color(0xffc5c5c5))
 
               )
               ),
-              child: Row(
+              child: const Row(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   SizedBox(width: 10.0),
@@ -108,23 +108,23 @@ class _FeedbackPage extends State<FeedbackPage> {
             )
           ],
       ),
-        hintStyle: TextStyle(
+        hintStyle: const TextStyle(
           fontSize: 14.0,
           color: Color(0xffc5c5c5),
         ),
         hintText: "Phone Number",
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
     )
     );
   }
 
 
   buildFeedbackForm(){
-    return Container(
+    return SizedBox(
       height: 150.0,
       child: Stack(
         children: <Widget>[
-          TextField(
+          const TextField(
             maxLines: 10,
             decoration: InputDecoration(
               hintText: "Please briefly describe the issue",
@@ -140,7 +140,7 @@ class _FeedbackPage extends State<FeedbackPage> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 border: Border(
                   top: BorderSide(
                     width: 1.0,
@@ -148,15 +148,15 @@ class _FeedbackPage extends State<FeedbackPage> {
                   )
                 )
               ),
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: <Widget>[
                   Container(
                     decoration: BoxDecoration(
-                      color: Color(0xffe5e5e5),
+                      color: const Color(0xffe5e5e5),
                       borderRadius: BorderRadius.circular(5.0),
                     ),
-                    child: Padding(
+                    child: const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Icon(
                         Icons.add,
@@ -164,8 +164,8 @@ class _FeedbackPage extends State<FeedbackPage> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 10.0),
-                  Text( "Uplode Screenshot (Optional)",
+                  const SizedBox(width: 10.0),
+                  const Text( "Uplode Screenshot (Optional)",
                     style: TextStyle(
                       color: Color(0xffc5c5c5),
                     ),
@@ -180,12 +180,12 @@ class _FeedbackPage extends State<FeedbackPage> {
   }
   
   buildCheckItem(title){
-    return Padding(padding: EdgeInsets.only(bottom: 15.0),
+    return Padding(padding: const EdgeInsets.only(bottom: 15.0),
     child: Row(
       children: <Widget>[
-        Icon(Icons.check_circle,color: Colors.orange),
-        SizedBox(width: 10.0),
-        Text(title,style: TextStyle(fontWeight: FontWeight.bold,
+        const Icon(Icons.check_circle,color: Colors.orange),
+        const SizedBox(width: 10.0),
+        Text(title,style: const TextStyle(fontWeight: FontWeight.bold,
           color: Colors.orange,
         ),
         )

@@ -4,20 +4,21 @@ class CustomText extends StatelessWidget {
   final String text;
   final double fontSize;
   final FontWeight fontWeight;
-  final Color color;
   final TextAlign textAlign;
   final int? maxLines;
   final TextOverflow overflow;
 
+  final dynamic textColor;
+
   const CustomText({
     Key? key,
     required this.text,
-    this.fontSize = 16.0,
+    this.fontSize = 18.0,
     this.fontWeight = FontWeight.normal,
-    this.color = Colors.black,
     this.textAlign = TextAlign.center,
     this.maxLines,
     this.overflow = TextOverflow.ellipsis,
+    this.textColor = Colors.white,
   }) : super(key: key);
 
   @override
@@ -27,7 +28,7 @@ class CustomText extends StatelessWidget {
       style: TextStyle(
         fontSize: fontSize,
         fontWeight: fontWeight,
-        color: color,
+        color: textColor
       ),
       textAlign: textAlign,
       maxLines: maxLines,

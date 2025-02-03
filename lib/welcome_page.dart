@@ -1,11 +1,12 @@
-import 'package:aces/auth_users/loginPage.dart';
-import 'package:aces/adminHome/admin_bottom_nav.dart';
-import 'package:aces/components/button.dart';
+import 'package:aces/auth_users/login_page.dart';
+import 'package:aces/components/custom_button.dart';
+import 'package:aces/constants/AppImages.dart';
 import 'package:aces/constants/colors.dart';
-import 'package:aces/userHome/bottomNavBar/mainBottomNav.dart';
-import 'package:aces/auth_users/registerPage.dart';
+import 'package:aces/userHome/bottomNavBar/main_bottom_navigation.dart';
+import 'package:aces/auth_users/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'adminHome/admin_page.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key, this.title});
@@ -17,41 +18,28 @@ class WelcomePage extends StatefulWidget {
 
 class _WelcomePageState extends State<WelcomePage> {
   Widget _slider() {
+    final List<String> sliderImages = [
+      AppImages.sliderImg1,
+      AppImages.sliderImg2,
+      AppImages.sliderImg3,
+      AppImages.sliderImg4,
+    ];
+
     return CarouselSlider(
-      items: [
-        Container(
+      items: sliderImages.map((imagePath) {
+        return Container(
           margin: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
-            image: const DecorationImage(
-              image: AssetImage("assets/imag1.jpg"),
+            image: DecorationImage(
+              image: AssetImage(imagePath),
               fit: BoxFit.fill,
             ),
           ),
-        ),
-        Container(
-          margin: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0),
-            image: const DecorationImage(
-              image: AssetImage("assets/imag2.jpg"),
-              fit: BoxFit.fill,
-            ),
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0),
-            image: const DecorationImage(
-              image: AssetImage("assets/imag3.jpg"),
-              fit: BoxFit.fill,
-            ),
-          ),
-        ),
-      ],
+        );
+      }).toList(),
       options: CarouselOptions(
-        height: 450,
+        height: 530,
         enlargeCenterPage: true,
         autoPlay: true,
         aspectRatio: 16 / 15,
@@ -66,59 +54,58 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor:  AppColors.lightGray,
-        body: Center(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Stack(children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                // mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const SizedBox(height:100,),
-                  _slider(),
-
-              const Divider(),
-                  const SizedBox(height: 40),
-                  CustomButton(onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                            const LoginScreen ()));
-                  }, text: "Login Now", width: 280, ),
-
-                  const SizedBox(height: 20),
-                  CustomButton(onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const RegisterScreen()));
-                  }, text: "Register Now", width: 280, ),
-
-          const SizedBox(height: 130),
-                  CustomButton(onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const mainBottomNav(title: "User Pages")));
-                  }, text: "User Backdoor", width: 280, ),
-                  const SizedBox(height:30),
-
-                  CustomButton(onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>  const admin_bottom_nav(title: "Admin pages",)));
-                    },
-                    text: "Admin Backdoor",
-                    width: 280,
-                  ),
-                  const SizedBox(height:30),
-                ],
-              ),
-            ]),
+      backgroundColor: AppColors.lightGray,
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              const SizedBox(height: 40),
+              _slider(),
+              const Divider(color: Colors.red, thickness: 0.5),
+              const SizedBox(height: 40),
+              _buildButton("Login Now", AppColors.scarletRed, () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                );
+              }),
+              const SizedBox(height: 20),
+              _buildButton("Register Now", null, () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const RegisterScreen()),
+                );
+              }),
+              const SizedBox(height: 130),
+              _buildButton("User Backdoor", null, () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const mainBottomNav(title: "User Pages")),
+                );
+              }),
+              const SizedBox(height: 30),
+              _buildButton("Admin Backdoor", null, () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const admin_page(title: "Admin pages")),
+                );
+              }),
+              const SizedBox(height: 30),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
+  }
+
+  Widget _buildButton(String text, Color? backgroundColor, VoidCallback onPressed) {
+    return CustomButton(
+      onPressed: onPressed,
+      text: text,
+      width: 280,
+      textColor: AppColors.roseRedColor,
+      backgroundColor: AppColors.lightGray,
+    );
   }
 }

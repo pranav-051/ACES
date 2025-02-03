@@ -23,24 +23,28 @@ class CustomTextField extends StatelessWidget {
     return TextField(
       controller: controller,
       style: const TextStyle(color: Colors.black, height: 1),
-      keyboardType: TextInputType.text,
+      keyboardType: keyboardType, // Use the provided keyboardType
       decoration: InputDecoration(
         labelText: labelText,
         labelStyle: const TextStyle(color: Colors.black),
         hintText: hintText,
         hintStyle: const TextStyle(color: AppColors.gray),
         filled: true,
-        fillColor:  AppColors.lightGray2,
-        border: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.black),
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10), // Match border radius
+          borderSide: const BorderSide(color: Colors.black), // Match border color
         ),
-        enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.black), // Enabled border color
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10), // Match border radius
+          borderSide: const BorderSide(color: Colors.black), // Match enabled border color
         ),
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.black), // Focused border color
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10), // Match border radius
+          borderSide: const BorderSide(color: Colors.black), // Match focused border color
         ),
         prefixIcon: Icon(icon, color: AppColors.gray), // Icon color
+        contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15), // Match content padding
       ),
     );
   }
